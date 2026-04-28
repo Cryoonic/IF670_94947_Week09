@@ -46,7 +46,7 @@
         }
       ],
       [
-        "expo-media-libary",
+        "expo-media-library",
         {
           "photosPermission": "Allow $(PRODUCT_NAME) to access your photos to select and save media.",
           "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos to your library.",

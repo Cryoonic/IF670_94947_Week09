@@ -1,10 +1,13 @@
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
+import * as MediaLibrary from "expo-media-library";
 import { useState } from "react";
 import { Button, Image, StyleSheet, Text, View } from "react-native";
+import { copyAsync } from "expo-file-system";
 
 export default function index() {
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<string | null>(null);
 
   const openCamera = async () => {
     const permission = await Camera.requestCameraPermissionsAsync();
@@ -42,14 +45,38 @@ export default function index() {
     }
   };
 
+  const saveImage = async () => {
+    if (!image) {
+      alert("No image to save!");
+      return;
+    }
+
+    const permission = await MediaLibrary.requestPermissionsAsync();
+    if (!permission.granted) {
+      alert("Permission required!");
+      return;
+    }
+
+    try {
+      await MediaLibrary.saveToLibraryAsync(image);
+      alert("Image saved to gallery!");
+    } catch (error) {
+      console.log(error);
+      alert("Failed to save image");
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Name - NIM</Text>
+      <Text style={styles.text}>Albert - 00000094947</Text>
       <View style={styles.button}>
         <Button title="Open Camera" onPress={openCamera} />
       </View>
       <View style={styles.button}>
         <Button title="Open Gallery" onPress={openGallery} />
+      </View>
+      <View style={styles.button}>
+        <Button title="Save Image" onPress={saveImage} />
       </View>
       {image && <Image source={{ uri: image }} style={styles.image} />}
     </View>
